@@ -3,6 +3,120 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-2 mb-2">
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/f6d19c5f4a554bab9b4bf49a8533a39e_9366/adizero-prime-x-2.0-strung-shoes.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+
+                    <div class="row">
+                        <p class="col-6">Rs.700.00</p>
+                        <p class="col-6">Rs.800.00</p>
+                    </div>
+                    <a>Buy Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/f6d19c5f4a554bab9b4bf49a8533a39e_9366/adizero-prime-x-2.0-strung-shoes.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a short card.</p>
+                    <div class="row">
+                        <p class="col-6">Rs.700.00</p>
+                        <p class="col-6">Rs.800.00</p>
+                    </div>
+                    <a>Buy Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/f6d19c5f4a554bab9b4bf49a8533a39e_9366/adizero-prime-x-2.0-strung-shoes.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                    <div class="row">
+                        <p class="col-6">Rs.700.00</p>
+                        <p class="col-6">Rs.800.00</p>
+                    </div>
+                    <a>Buy Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/f6d19c5f4a554bab9b4bf49a8533a39e_9366/adizero-prime-x-2.0-strung-shoes.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div class="row">
+                        <p class="col-6">Rs.700.00</p>
+                        <p class="col-6">Rs.800.00</p>
+                    </div>
+                    <a>Buy Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Chat Iframe -->
+<div id="chat-iframe-container" style="display:none">
+    <iframe src="https://localhost:7034/" width="100%" height="500"></iframe>
+</div>
+
+<div tabindex="0" role="button" class="chatRootIcon__pointer___QslJf" aria-labelledby="rootChatIcon">
+    <div id="rootChatIcon" role="img" aria-label="SuperJeweler logo" class="chatIcon__chatIcon___7jaa5" data-kt="chat-icon">
+    </div>
+</div>
+
+<script>
+    const chatIcon = document.getElementById('rootChatIcon');
+    const chatIframe = document.getElementById('chat-iframe-container');
+
+    chatIcon.addEventListener('click', () => {
+      chatIframe.style.display = chatIframe.style.display === 'block' ? 'none' : 'block';
+    });
+</script>
+
+
+
+<style>
+    .chatIcon__chatIcon___7jaa5 {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        width: 60px;
+        height: 60px;
+        background-size: cover;
+        background-image: url("https://media.superjeweler.com/image/upload/v1603373983/amp-assets/live-chat-icon-for-kustomer-2.gif");
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #chat-iframe-container {
+        display: none;
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        height: 500px;
+        z-index: 1000;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        #chat-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+</style>
