@@ -1,4 +1,6 @@
-﻿<div class="container mt-5">
+﻿@model DashbordModel
+
+<div class="container mt-5">
     <h2 class="mb-4">Admin Panel - Product List</h2>
 
     <table class="table table-bordered table-striped">
@@ -14,29 +16,23 @@
         </thead>
         <tbody>
             <!-- Example static products -->
-            <tr>
-                <td>1</td>
-                <td><img src="https://via.placeholder.com/50" alt="Product" class="img-thumbnail"></td>
-                <td>Product A</td>
-                <td>$10.99</td>
-                <td>25</td>
-                <td>
-                    <button class="btn btn-sm btn-primary">Edit</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><img src="https://via.placeholder.com/50" alt="Product" class="img-thumbnail"></td>
-                <td>Product B</td>
-                <td>$24.50</td>
-                <td>10</td>
-                <td>
-                    <button class="btn btn-sm btn-primary">Edit</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                </td>
-            </tr>
-            <!-- Add more rows dynamically using backend or JavaScript -->
+            @{
+                foreach(var p in Model.ProductList) 
+                {
+                    <tr>
+                        <td>@p.Id</td>
+                        <td><img src="@p.Image" alt="Product" class="img-thumbnail"></td>
+                        <td>@p.ProductName</td>
+                        <td>@p.Price</td>
+                        <td>@p.Stock</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+
         </tbody>
     </table>
 </div>
