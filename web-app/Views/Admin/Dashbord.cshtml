@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Example static products -->
+            <!--Product list-->
             @{
                 foreach(var p in Model.ProductList) 
                 {
@@ -26,8 +26,7 @@
                         <td>@p.Price</td>
                         <td>@p.Stock</td>
                         <td>
-                            <button class="btn btn-sm btn-primary">Edit</button>
-                            <button class="btn btn-sm btn-danger">Delete</button>
+                            <a href="~/Admin/EditeItemDetails/@p.Id" class="btn btn-sm btn-primary">Edit</a>
                         </td>
                     </tr>
                 }

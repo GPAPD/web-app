@@ -12,6 +12,10 @@ namespace web_app.Data.IService.ProductServies
             _db = db;
         }
 
+        public async Task<Product>? GetProductById(long Id)
+        {
+            return await _db.Products.FirstOrDefaultAsync(p => p.Id == Id);
+        }
 
         async Task<IEnumerable<Product>>? IProductServies.GetAllItems(int perPage)
         {

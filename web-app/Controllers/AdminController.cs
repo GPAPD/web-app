@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using web_app.Data.Entity;
 using web_app.Data.IService;
 using web_app.Models;
 
@@ -19,10 +20,31 @@ namespace web_app.Controllers
             return View(model);
         }
 
-        public IActionResult EditeItemDetails() 
+        public async Task<IActionResult> EditeItemDetails(long Id) 
         {
+            DashbordModel model = new DashbordModel();
+            if (Id > 0) 
+            {
+                model.Product = await _productsServies.GetProductById(Id);
+                if (model.Product == null) 
+                {
+                    return RedirectToAction("Dashbord", "Admin");
+                }
+                
+            }
 
-            return View();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult SaveItem(Product content) 
+        {
+            if (content != null) 
+            {
+               
+            }
+
+            return RedirectToAction("Dashbord", "Admin");
         }
     }
 }
