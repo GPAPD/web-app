@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using web_app.Data;
 using web_app.Data.IService;
 using web_app.Data.IService.ProductServies;
+using web_app.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductServies, ProductServies>();
+builder.Services.AddScoped<ResponseDto>();
 
 var app = builder.Build();
 

@@ -37,13 +37,12 @@ namespace web_app.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveItem(Product content) 
+        public async Task<IActionResult> UpdateItem(Product content) 
         {
             if (content != null) 
             {
-               
+                ResponseDto responseDto = await _productsServies.UpdateProduct(content);
             }
-
             return RedirectToAction("Dashbord", "Admin");
         }
     }
