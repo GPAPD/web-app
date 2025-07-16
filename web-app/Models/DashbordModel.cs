@@ -7,5 +7,7 @@ namespace web_app.Models
         public IEnumerable<Product> ProductList { get; set; }
 
         public Product Product { get; set; }
+
+        public List<string>? ItemCatogories { get; set; }
     }
 }

@@ -15,6 +15,28 @@ namespace web_app.Data.IService.ProductServies
             _responseDto = responseDto;
         }
 
+        public async Task<ResponseDto> AddNewProduct(Product content)
+        {
+            try
+            {
+                if (content != null)
+                {
+                    _db.Add(content);
+                    _responseDto.Result = await _db.SaveChangesAsync();
+                    _responseDto.IsSuccess = true;
+                    _responseDto.Message = "Saved";
+                }
+
+                return _responseDto;
+            }
+            catch (Exception ex)
+            {
+                _responseDto.Message = ex.Message;
+
+                return _responseDto;
+            }
+        }
+
         public async Task<Product>? GetProductById(long Id)
         {
             return await _db.Products.FirstOrDefaultAsync(p => p.Id == Id);
@@ -29,7 +51,7 @@ namespace web_app.Data.IService.ProductServies
                     _db.Update(content);
                     _responseDto.Result =  await _db.SaveChangesAsync();
                     _responseDto.IsSuccess = true;
-                    _responseDto.Message = "Saved";
+                    _responseDto.Message = "Updated";
                 }
 
                 return _responseDto;

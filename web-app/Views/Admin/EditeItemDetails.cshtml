@@ -4,27 +4,33 @@
 {
     <script>
         $(document).ready(function () {
-          $('#editBtn').click(function () {
-            $('input, textarea').prop('disabled', false);
-            $('#editBtn').addClass('d-none');
-            $('#saveBtn').removeClass('d-none');
-          });
+        $('#editBtn').click(function () {
+        $('input, textarea,select').prop('disabled', false);
+        $('#editBtn').addClass('d-none');
+        $('#saveBtn').removeClass('d-none');
+        });
 
-          $('#saveBtn').click(function () {
-            const IsLive = $('#Live').val();
-            console.log(IsLive);
+        $('#saveBtn').click(function () {
+        const IsLive = $('#Live').val();
+        console.log(IsLive);
 
-            if ($('#Live').is(':checked')) {
-                $("#IsLive").val(true);
-            }else
-            {
-                $("#IsLive").val(false);
-            }
-            
-          });
+        if ($('#Live').is(':checked')) {
+        $("#IsLive").val(true);
+        }else
+        {
+        $("#IsLive").val(false);
+        }
+
+        });
         });
     </script>
 }
+
+@{
+    var cat = new List<string> { "Electronics", "Clothing", "Books", "Home","Office", "Amino", "Acid", "Fat Burner", "Herbal", "Hydration", "Mineral", "Omega", "Performance", "Protein", "Sleep Aid", "Vitamin" };
+    var selectedCategory = Model.Product.Category ?? "";
+}
+
 <div class="container mt-5">
     <form action="~/Admin/UpdateItem" method="POST">
 
@@ -45,9 +51,23 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="Category" class="form-label">Category</label>
-                    <input type="text" name="Category" class="form-control" id="Category" value="@Model.Product.Category" disabled>
+                <label for="Category" class="form-label">Category</label>
+                    <select name="Category" class="form-control" id="Category" disabled>
+                        <option value="">-- Select Category --</option>
+                        @foreach (var c in cat)
+                        {
+                            if (selectedCategory == c)
+                            {
+                                <option value="@c" selected="selected">@c</option>
+                            }
+                            else
+                            {
+                                <option value="@c">@c</option>
+                            }
+                        }
+                    </select>
                 </div>
+
 
                 <div class="mb-3">
                     <label for="Price" class="form-label">Stock</label>
