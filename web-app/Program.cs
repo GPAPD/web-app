@@ -3,6 +3,9 @@ using web_app.Data;
 using web_app.Data.IService;
 using web_app.Data.IService.ProductServies;
 using web_app.Models;
+using web_app.Service;
+using web_app.Service.IService;
+using web_app.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +19,13 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductServies, ProductServies>();
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<ResponseDto>();
+
+builder.Services.AddHttpClient();
+
+SD.FlaskBackedApi = builder.Configuration["ServiceUrls:FlaskBackedApi"];
 
 var app = builder.Build();
 

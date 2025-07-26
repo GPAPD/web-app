@@ -65,9 +65,9 @@ namespace web_app.Data.IService.ProductServies
             
         }
 
-        async Task<IEnumerable<Product>>? IProductServies.GetAllItems(int perPage)
+        public async Task<IEnumerable<Product>>? GetAllItems()
         {
-            IEnumerable<Product> products = await _db.Products.Take(perPage).ToListAsync();
+            IEnumerable<Product> products = await _db.Products.ToListAsync();
 
             return products;
         }

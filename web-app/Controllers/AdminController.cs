@@ -2,20 +2,24 @@
 using web_app.Data.Entity;
 using web_app.Data.IService;
 using web_app.Models;
+using System.IO;
+using web_app.Service.IService;
 
 namespace web_app.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IProductServies _productsServies;
-        public AdminController(IProductServies productServies) 
+        private readonly ISearchService _searchService ;
+        public AdminController(IProductServies productServies, ISearchService searchService) 
         {
             _productsServies = productServies;
+            _searchService = searchService;
         }
         public async Task<IActionResult> Dashbord()
         {
             DashbordModel model = new DashbordModel();
-            model.ProductList = await _productsServies.GetAllItems(100);
+            model.ProductList = await _productsServies.GetAllItems();
 
             return View(model);
         }
@@ -64,5 +68,83 @@ namespace web_app.Controllers
             }
             return RedirectToAction("Dashbord", "Admin");
         }
+
+        public async Task<IEnumerable<Product>> GetAllProducts() 
+        {
+            IEnumerable<Product> productlist = new List<Product>();    
+
+
+            return productlist;
+        }
+
+        [HttpPost]
+        public async Task<bool> ExportDataIntoCSV()
+        {
+            IEnumerable<Product> productsList = new List<Product>();
+
+            try
+            {
+                productsList = await _productsServies.GetAllItems();
+
+                if (productsList == null || !productsList.Any())
+                    return false;
+
+                string folderPath = @"C:\Users\akash\Desktop\doc-reder\pravixMatic\ai-assistant\backend\item_data";
+                string fileName = "testdata.csv";
+                string fullPath = Path.Combine(folderPath, fileName);
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                using (StreamWriter writer = new StreamWriter(fullPath, false)) // false = overwrite
+                {
+                    writer.AutoFlush = true;
+
+                    // header
+                    writer.WriteLine("item_id,item_description,item_price,item_category");
+
+                    // rows
+                    foreach (var product in productsList)
+                    {
+                        string id = product.Id.ToString();
+                        string description = EscapeForCsv(product.ProductDesc);
+                        string price = product.Price.ToString();
+                        string category = EscapeForCsv(product.Category);
+
+                        writer.WriteLine($"{id},{description},{price},{category}");
+                    }
+                }
+
+                //send api request 
+                var updated = false;
+
+                ResponseDto response = await _searchService.UpdateIndexing();
+                if (response != null) 
+                {
+                    updated = response.IsSuccess;
+
+                    return updated;
+                }
+                return updated;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        // Helper method to handle commas and quotes in CSV
+        private string EscapeForCsv(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return "";
+            if (value.Contains(",") || value.Contains("\"") || value.Contains("\n"))
+            {
+                value = value.Replace("\"", "\"\""); // Escape quotes
+                return $"\"{value}\""; // Wrap in quotes
+            }
+            return value;
+        }
+
     }
 }

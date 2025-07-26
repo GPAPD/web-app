@@ -5,7 +5,7 @@
         <h2 class="mb-4 col-md-8">Admin Panel - Product List</h2>
         <div class="col-md-4">
             <a class="btn btn-primary mb-2" href="~/Admin/AddNewItem">Add New Item</a>
-            <button class="btn btn-primary mb-2" href="">Start Indexing</button>
+            <button class="btn btn-primary mb-2" id="Index_database">Start Indexing</button>
         </div>
     </div>
 
@@ -42,3 +42,25 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $("#Index_database").click(function(){
+            alert("Button clicked");
+            
+            $.ajax({
+                url:'@Url.Action("ExportDataIntoCSV", "Admin")',
+                type:"Post",
+                success:function(data){
+                    if(data == true){
+                        alert("Database Indexing is completed");
+                    }
+                },
+                error:function(err){
+                    alert("Error ouccerd : "+err);
+                }
+            })
+        });
+
+    });
+</script>
