@@ -43,11 +43,19 @@ namespace web_app.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateItem(Product content) 
         {
-            if (content != null) 
+            var predictable = new List<string> { "Amino", "Acid", "Fat Burner", "Herbal", "Hydration", "Mineral", "Omega", "Performance", "Protein", "Sleep Aid", "Vitamin" };
+            if (content != null && content.Category != null && predictable.Contains(content.Category) && content.Price > 0 && content.Price < 100)
             {
                 ResponseDto responseDto = await _productsServies.UpdateProduct(content);
+                return RedirectToAction("Dashbord", "Admin");
             }
-            return RedirectToAction("Dashbord", "Admin");
+            else 
+            {
+                DashbordModel model = new DashbordModel();
+                model.Product = content;
+                ModelState.AddModelError("CustomError","This items is over priced");
+                return View("EditeItemDetails", model);
+            }           
         }
 
         public IActionResult AddNewItem() 

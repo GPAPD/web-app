@@ -10,23 +10,31 @@
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-2 mb-2">
 
         @{
-            foreach (var p in Model.ProductList)
+            if (Model != null && Model.ProductList != null && Model.ProductList.Count() > 1)
             {
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="@p.Image" class="card-img-top img-fluid mx-auto d-block pt-4" alt="@p.ProductName" style="max-width: 200px">
-                        <div class="card-body">
-                            <h5 class="card-title">@p.ProductName</h5>
-                            <p class="card-text">@p.ProductDesc</p>
+                foreach (var p in Model.ProductList)
+                {
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="@p.Image" class="card-img-top img-fluid mx-auto d-block pt-4" alt="@p.ProductName" style="max-width: 200px">
+                            <div class="card-body">
+                                <h5 class="card-title">@p.ProductName</h5>
+                                <p class="card-text">@p.ProductDesc</p>
 
-                            <div class="row">
-                                <p class="col-6">Rs.700.00</p>
-                                <p class="col-6">Rs.@p.Price</p>
+                                <div class="row">
+                                    <p class="col-6">Rs.700.00</p>
+                                    <p class="col-6">Rs.@p.Price</p>
+                                </div>
+
+                                <a>Buy Now</a>
                             </div>
-
-                            <a>Buy Now</a>
                         </div>
                     </div>
+                }
+            }else
+            {
+                <div class="col">
+                     <p>No Result Found</p>
                 </div>
             }
         }

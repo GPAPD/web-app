@@ -50,7 +50,7 @@ namespace web_app.Controllers
                     foreach (var item in data.Results) 
                     {
                         //resulut should score should be greter that 0.3
-                        if (item.Score >= 0.3) 
+                        if (item.Score >= 0.35) 
                         {
                             // Pattern to extract item_id
                             var match = Regex.Match(item.Content, @"item_id:\s*(\d+)");

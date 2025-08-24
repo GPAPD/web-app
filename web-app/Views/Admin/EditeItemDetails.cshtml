@@ -1,39 +1,93 @@
-﻿@model DashbordModel
+﻿@using web_app.Utility
+@model DashbordModel
 
 @section Scripts 
 {
     <script>
-        $(document).ready(function () {
-        $('#editBtn').click(function () {
-        $('input, textarea,select').prop('disabled', false);
-        $('#editBtn').addClass('d-none');
-        $('#saveBtn').removeClass('d-none');
-        });
-
-        $('#saveBtn').click(function () {
-        const IsLive = $('#Live').val();
-        console.log(IsLive);
-
-        if ($('#Live').is(':checked')) {
-        $("#IsLive").val(true);
-        }else
+        $(document).ready(function () 
         {
-        $("#IsLive").val(false);
+            $('#editBtn').click(function () 
+            {
+                $('input, textarea,select').prop('disabled', false);
+                    $('#editBtn').addClass('d-none');
+                    $('#saveBtn').removeClass('d-none');
+                });
+
+                $('#saveBtn').click(function () 
+                {
+                    const IsLive = $('#Live').val();
+                    console.log(IsLive);
+
+                if ($('#Live').is(':checked')) 
+                {
+                    $("#IsLive").val(true);
+                }else
+                {
+                    $("#IsLive").val(false);
+                }
+
+            });
+        });
+    </script>
+    <script>
+        async function getPrediction() {
+          const data = {
+            Price: parseFloat(document.getElementById('Price').value),
+            Discount: 0,
+            Category_Amino_Acid: @(Model.Product.Category == "Amino Acid" ? 1 : 0),
+            Category_Fat_Burner: @(Model.Product.Category == "Fat Burner" ? 1 : 0),
+            Category_Herbal: @(Model.Product.Category == "Herbal" ? 1 : 0),
+            Category_Hydration: @(Model.Product.Category == "Hydration" ? 1 : 0),
+            Category_Mineral: @(Model.Product.Category == "Mineral" ? 1 : 0),
+            Category_Omega: @(Model.Product.Category == "Omega" ? 1 : 0),
+            Category_Performance: @(Model.Product.Category == "Performance" ? 1 : 0),
+            Category_Protein: @(Model.Product.Category == "Protein" ? 1 : 0),
+            Category_Sleep_Aid: @(Model.Product.Category == "Sleep Aid" ? 1 : 0),
+            Category_Vitamin: @(Model.Product.Category == "Vitamin" ? 1 : 0)
+          };
+
+          try {
+            const response = await fetch("@(SD.FlaskBackedApi)/predict", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            console.log("Prediction:", result);
+
+            // Example: show on page
+            // document.getElementById("output").innerText =
+            //   "Predicted Revenue: $" + result.Predicted_Revenue;
+          } catch (error) {
+            console.log("Error:", error);
+          }
         }
 
-        });
-        });
     </script>
 }
 
 @{
     var cat = new List<string> { "Electronics", "Clothing", "Books", "Home","Office", "Amino", "Acid", "Fat Burner", "Herbal", "Hydration", "Mineral", "Omega", "Performance", "Protein", "Sleep Aid", "Vitamin" };
+    var predictable = new List<string> { "Amino Acid", "Fat Burner", "Herbal", "Hydration", "Mineral", "Omega", "Performance", "Protein", "Sleep Aid", "Vitamin" };
     var selectedCategory = Model.Product.Category ?? "";
 }
 
 <div class="container mt-5">
     <form action="~/Admin/UpdateItem" method="POST">
-
+        <div class="row text-center">
+            @{
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div class="text-danger">@error.ErrorMessage</div>
+                    }
+                }
+            }
+        </div>
         <div class="card shadow rounded">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0">Item Details</h4>
@@ -51,7 +105,7 @@
                 </div>
 
                 <div class="mb-3">
-                <label for="Category" class="form-label">Category</label>
+                    <label for="Category" class="form-label">Category</label>
                     <select name="Category" class="form-control" id="Category" disabled>
                         <option value="">-- Select Category --</option>
                         @foreach (var c in cat)
@@ -70,13 +124,17 @@
 
 
                 <div class="mb-3">
-                    <label for="Price" class="form-label">Stock</label>
+                    <label for="Stock" class="form-label">Stock</label>
                     <input type="number" name="Stock" class="form-control" id="Stock" value="@Model.Product.Stock" disabled>
                 </div>
 
                 <div class="mb-3">
                     <label for="Price" class="form-label">Price ($)</label>
                     <input type="number" name="Price" class="form-control" id="Price" value="@Model.Product.Price" disabled>
+                    @if (predictable.Contains(selectedCategory))
+                    {
+                        <a id="predict-revenue" class="btn btn-warning mt-3" onclick="getPrediction()" style="">Predict Revenue</a>
+                    }
                 </div>
 
                 <div class="mb-3">
