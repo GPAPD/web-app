@@ -44,18 +44,19 @@ namespace web_app.Controllers
         public async Task<IActionResult> UpdateItem(Product content) 
         {
             var predictable = new List<string> { "Amino", "Acid", "Fat Burner", "Herbal", "Hydration", "Mineral", "Omega", "Performance", "Protein", "Sleep Aid", "Vitamin" };
-            if (content != null && content.Category != null && predictable.Contains(content.Category) && content.Price > 0 && content.Price < 100)
-            {
+
+            //if (content != null && content.Category != null && predictable.Contains(content.Category) && content.Price > 0 && content.Price < 100)
+            //{
                 ResponseDto responseDto = await _productsServies.UpdateProduct(content);
                 return RedirectToAction("Dashbord", "Admin");
-            }
-            else 
-            {
-                DashbordModel model = new DashbordModel();
-                model.Product = content;
-                ModelState.AddModelError("CustomError","This items is over priced");
-                return View("EditeItemDetails", model);
-            }           
+            //}
+            //else 
+            //{
+            //    DashbordModel model = new DashbordModel();
+            //    model.Product = content;
+            //    ModelState.AddModelError("CustomError","This items is over priced");
+            //    return View("EditeItemDetails", model);
+            //}           
         }
 
         public IActionResult AddNewItem() 
@@ -97,7 +98,9 @@ namespace web_app.Controllers
                 if (productsList == null || !productsList.Any())
                     return false;
 
-                string folderPath = @"C:\Users\akash\Desktop\doc-reder\pravixMatic\ai-assistant\backend\item_data";
+                //string folderPath = @"C:\Users\akash\Desktop\doc-reder\pravixMatic\ai-assistant\backend\item_data";
+                //server root
+                string folderPath = @"C:\SearchApi\app\backend\item_data";
                 string fileName = "testdata.csv";
                 string fullPath = Path.Combine(folderPath, fileName);
 

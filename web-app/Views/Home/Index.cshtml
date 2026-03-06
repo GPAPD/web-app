@@ -34,24 +34,222 @@
 </div>
 
 <!-- Chat Iframe -->
-<div id="chat-iframe-container" style="display:none">
-    <iframe src="http://localhost:8501/" width="100%" height="500"></iframe>
-</div>
+@* <div id="chat-iframe-container" style="display:none"> *@
+@*     <iframe src="http://localhost:8501/" width="100%" height="500"></iframe> *@
+@* </div> *@
 
-<div tabindex="0" role="button" class="chatRootIcon__pointer___QslJf" aria-labelledby="rootChatIcon">
-    <div id="rootChatIcon" role="img" aria-label="SuperJeweler logo" class="chatIcon__chatIcon___7jaa5" data-kt="chat-icon">
+<!-- Floating Chat Widget -->
+<div id="chat-widget">
+    <div id="chat-header" onclick="toggleChat()">AI Assistant 💬</div>
+    <div id="chat-body">
+        <div id="chatbox"></div>
+        <div id="chat-input-area">
+            <input type="text" id="user_input" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
 </div>
 
-<script>
-    const chatIcon = document.getElementById('rootChatIcon');
-    const chatIframe = document.getElementById('chat-iframe-container');
+<style>
+    #chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        max-height: 500px;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 9999;
+    }
 
-    chatIcon.addEventListener('click', () => {
-      chatIframe.style.display = chatIframe.style.display === 'block' ? 'none' : 'block';
-    });
+    #chat-header {
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    #chat-body {
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+        background: #f9f9f9;
+    }
+
+    #chatbox {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .user, .assistant {
+        max-width: 75%;
+        padding: 10px 15px;
+        border-radius: 20px;
+        word-wrap: break-word;
+    }
+
+    .user {
+        align-self: flex-end;
+        background-color: #007bff;
+        color: white;
+        border-bottom-right-radius: 0;
+    }
+
+    .assistant {
+        align-self: flex-start;
+        background-color: #e0e0e0;
+        color: black;
+        border-bottom-left-radius: 0;
+    }
+        /* Loading bubble */
+        .assistant.loading {
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+    #chat-input-area {
+        display: flex;
+        border-top: 1px solid #ccc;
+        padding: 8px;
+        background: #fff;
+    }
+
+    #user_input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        outline: none;
+    }
+
+        #user_input:focus {
+            border-color: #007bff;
+        }
+
+    #chat-input-area button {
+        margin-left: 8px;
+        padding: 8px 16px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+        #chat-input-area button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<script>
+function toggleChat() {
+    const body = document.getElementById("chat-body");
+    body.style.display = body.style.display === "none" ? "flex" : "none";
+}
+document.getElementById("chat-body").style.display = "none";
+
+async function sendMessage() {
+    const input = document.getElementById('user_input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chatbox = document.getElementById('chatbox');
+
+    // Show user message
+    const userDiv = document.createElement('div');
+    userDiv.className = 'user';
+    userDiv.innerText = text;
+    chatbox.appendChild(userDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    input.value = '';
+
+    // Show loading bubble
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'assistant loading';
+    loadingDiv.innerText = 'Typing...';
+    chatbox.appendChild(loadingDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    // Simulate API call delay (replace this with your FastAPI call)
+    setTimeout(async () => {
+        // Replace with actual API call
+        // const response = await fetch("YOUR_FASTAPI_ENDPOINT", {...});
+        // const data = await response.json();
+        const data = { answer: "This is the AI response." };
+
+        // Remove loading
+        chatbox.removeChild(loadingDiv);
+
+        // Show assistant response
+        const assistantDiv = document.createElement('div');
+        assistantDiv.className = 'assistant';
+        assistantDiv.innerText = data.answer;
+        chatbox.appendChild(assistantDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }, 1000);
+}
 </script>
 
+@* <div tabindex="0" role="button" class="chatRootIcon__pointer___QslJf" aria-labelledby="rootChatIcon"> *@
+@*     <div id="rootChatIcon" role="img" aria-label="SuperJeweler logo" class="chatIcon__chatIcon___7jaa5" data-kt="chat-icon"> *@
+@*     </div> *@
+@* </div> *@
+
+@* <script> *@
+@*     const chatIcon = document.getElementById('rootChatIcon'); *@
+@*     //const chatIframe = document.getElementById('chat-iframe-container'); *@
+
+@*     chatIcon.addEventListener('click', () => { *@
+@*       chatIframe.style.display = chatIframe.style.display === 'block' ? 'none' : 'block'; *@
+@*     }); *@
+@* </script> *@
+
+<script>
+    let chat_history = [];
+
+    async function sendMessage() {
+      const input = document.getElementById('user_input');
+      const userText = input.value.trim();
+      if(!userText) return;
+
+      // Display user message
+      appendMessage('user', userText);
+      input.value = '';
+
+      // Call FastAPI
+      const response = await fetch('http://localhost:8000/live-chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ user_input: userText, chat_history: chat_history })
+      });
+      const data = await response.json();
+
+      // Display assistant message
+      appendMessage('assistant', data.answer);
+
+      // Update chat history
+      chat_history.push({ user: userText, assistant: data.answer });
+    }
+
+    function appendMessage(role, text) {
+      const chatbox = document.getElementById('chatbox');
+      const div = document.createElement('div');
+      div.className = role;
+      div.innerText = (role === 'user' ? 'You: ' : 'AI: ') + text;
+      chatbox.appendChild(div);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+</script>
 
 
 <style>
@@ -59,7 +257,7 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
-        z-index: 1000;
+        z-index: 10000;
         width: 60px;
         height: 60px;
         background-size: cover;
@@ -76,16 +274,16 @@
         right: 20px;
         width: 350px;
         height: 500px;
-        z-index: 1000;
+        z-index: 10000;
         border: 1px solid #ccc;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         border-radius: 12px;
         overflow: hidden;
     }
 
-        #chat-iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    #chat-iframe-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
 </style>

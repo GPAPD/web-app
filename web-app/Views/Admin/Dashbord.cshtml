@@ -54,7 +54,11 @@
                 success:function(data){
                     if(data == true){
                         alert("Database Indexing is completed");
+                    }else
+                    {
+                        alert("Request Failed");
                     }
+
                 },
                 error:function(err){
                     alert("Error ouccerd : "+err);

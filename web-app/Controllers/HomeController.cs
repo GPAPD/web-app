@@ -78,7 +78,7 @@ namespace web_app.Controllers
                     model.ProductList = SearchProductList;
                 }
             }
-            
+            model.SearchQuary = search;    
             
             return View(model);
         }

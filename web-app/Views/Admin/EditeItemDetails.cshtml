@@ -58,9 +58,8 @@
             const result = await response.json();
             console.log("Prediction:", result);
 
-            // Example: show on page
-            // document.getElementById("output").innerText =
-            //   "Predicted Revenue: $" + result.Predicted_Revenue;
+            document.getElementById("output").innerText =
+              result.res;
           } catch (error) {
             console.log("Error:", error);
           }
@@ -131,15 +130,17 @@
                 <div class="mb-3">
                     <label for="Price" class="form-label">Price ($)</label>
                     <input type="number" name="Price" class="form-control" id="Price" value="@Model.Product.Price" disabled>
+
                     @if (predictable.Contains(selectedCategory))
                     {
                         <a id="predict-revenue" class="btn btn-warning mt-3" onclick="getPrediction()" style="">Predict Revenue</a>
+                        <div id="output">
+                        </div>
                     }
                 </div>
 
                 <div class="mb-3">
                     <label for="Image" class="form-label">Image Url</label>
-                    <input type="text" name="Image" class="form-control" id="Image" value="@Model.Product.Image" disabled>
                 </div>
 
                 <input type="hidden" name="IsLive" id="IsLive" value="" />

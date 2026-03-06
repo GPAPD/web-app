@@ -6,5 +6,7 @@ namespace web_app.Models
     {
         public IEnumerable<Product> ProductList { get; set; }
 
+        public string SearchQuary { get; set; }
+
     }
 }
